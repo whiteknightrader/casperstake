@@ -110,8 +110,8 @@ echo ""
 while true
 do
  echo ""
- echo "(Continue with the above address - type y and press Enter )"
- echo "(Upload your backed up keys - type n and press Enter )"
+ echo "(Continue with the above address :- Type y and press Enter )"
+ echo "(Upload your backed up keys :- Type n and press Enter )"
  read -r -p "Continue with this address ? [y/n] " input
  
  case $input in
@@ -263,10 +263,12 @@ if [ $BALANCE -gt $delegation_fee ]; then
 	 echo "CHECK YOUR STAKING TRANSACTION STATUS AT:"
 	 echo "${UNDERLINE}${LIGHTPURPLE}https://cspr.live/deploy/$DELEGATE_TRANSACTION_HASH${NC}"
 
-	 echo "Delegation transation output is stored in the file $HOME/transOut for your reference."
+         echo ""
+	 echo "Delegation transaction output is stored in the file $HOME/transOut for your reference."
 
 	 echo ""
 	 echo "Validator page:"
+	 echo "--------------"
 	 echo "${UNDERLINE}${CYAN}https://cspr.live/validator/01090f4e3a28cc04ae751434bc8b9b3d8fb9741b0d6a2d29b23ab719edac5d3019${NC}"
 	 echo ""
 	 echo ""
