@@ -157,7 +157,7 @@ delegation_fee=3000000000
 
 
 #Standard Calculations do not delete
-delegation_fee_decimal=$(echo "scale=10; $delegation_fee/$mots" | bc)
+delegation_fee_decimal=$(echo "scale=9; $delegation_fee/$mots" | bc)
 
 PUBLIC_KEY_HEX=$(sudo cat $HOME/casperKeys/public_key_hex)
 
@@ -177,7 +177,7 @@ if [ -n "$BALANCE_ERROR" ]; then
 fi
 
 if [ -n "$BALANCE" ]; then	
-	BALANCE_DECIMAL=$(echo "scale=10; $BALANCE/$mots" | bc)
+	BALANCE_DECIMAL=$(echo "scale=9; $BALANCE/$mots" | bc)
 fi
 
 if [ $BALANCE -le $delegation_fee ]; then
@@ -202,7 +202,7 @@ while true
 	echo "Delgation binding fee: $delegation_fee_decimal CSPR"
 	echo "                       -------------------"
 	MAX_BALANCE_TO_DELEGATE=`expr $BALANCE - $delegation_fee`
-	MAX_BALANCE_TO_DELEGATE_DECIMAL=$(echo "scale=10; $MAX_BALANCE_TO_DELEGATE/$mots" | bc)
+	MAX_BALANCE_TO_DELEGATE_DECIMAL=$(echo "scale=9; $MAX_BALANCE_TO_DELEGATE/$mots" | bc)
 	
 	
 	echo "Maximum you can stake: $MAX_BALANCE_TO_DELEGATE_DECIMAL CSPR"
@@ -211,10 +211,10 @@ while true
 	
 	read -r -p "Enter your stake amount:" STAKE_ENTERED_IN_DECIMAL
 
-	STAKE_ENTERED_IN_MOTS=$(echo "scale=10;$STAKE_ENTERED_IN_DECIMAL*$mots" |bc)
+	STAKE_ENTERED_IN_MOTS=$(echo "scale=9;$STAKE_ENTERED_IN_DECIMAL*$mots" |bc)
 	STAKE_ENTERED_IN_MOTS_WHOLE=${STAKE_ENTERED_IN_MOTS%.*}
 	
-	STAKE_ENTERED_IN_RIGHT_DECIMAL=$(echo "scale=10; $STAKE_ENTERED_IN_MOTS_WHOLE/$mots" | bc)
+	STAKE_ENTERED_IN_RIGHT_DECIMAL=$(echo "scale=9; $STAKE_ENTERED_IN_MOTS_WHOLE/$mots" | bc)
 	
 	if [ $STAKE_ENTERED_IN_MOTS_WHOLE -gt 0 ] && [ $STAKE_ENTERED_IN_MOTS_WHOLE -le $MAX_BALANCE_TO_DELEGATE ]
 	then
@@ -252,12 +252,22 @@ if [ $BALANCE -gt $delegation_fee ]; then
 	 
 	 casper-client put-deploy --chain-name casper --node-address http://198.23.235.165:7777 -k $HOME/casperKeys/secret_key.pem --session-path "$HOME/casper-node/target/wasm32-unknown-unknown/release/delegate.wasm" --payment-amount $delegation_fee  --session-arg "validator:public_key='01090f4e3a28cc04ae751434bc8b9b3d8fb9741b0d6a2d29b23ab719edac5d3019'" --session-arg="amount:u512='${STAKE_ENTERED_IN_MOTS_WHOLE}'" --session-arg "delegator:public_key='${PUBLIC_KEY_HEX}'" 2>&1 1>$HOME/transOut
 	 
+	 cat transOut
+	 
 	 hash=$(jq .result.deploy_hash transOut)
 	 opt=$hash
 	 temp="${opt%\"}"
 	 DELEGATE_TRANSACTION_HASH="${temp#\"}"
 	 
-	 	 
+	 if [ -z "$DELEGATE_TRANSACTION_HASH" ]
+		then
+		 echo ""
+		 echo "${RED}ERROR RETRIEVING DELEGATION TRANSACTION HASH..!${NC}"
+		 echo " "
+		 exit
+	 fi
+	 
+	 echo ""
 	 echo "${GREEN}COMPLETED DELEGATION/STAKING TRANSATION ..!${NC}"
 	 echo ""
 	 echo "CHECK YOUR STAKING TRANSACTION STATUS AT:"
