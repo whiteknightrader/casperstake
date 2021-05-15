@@ -102,8 +102,6 @@ do
  esac
 done
 
-PUBLIC_KEY_HEX=$(sudo cat $HOME/casperKeys/public_key_hex)
-
 STATE_ROOT_HASH=$(casper-client get-state-root-hash --node-address http://198.23.235.165:7777 | jq -r '.result | .state_root_hash')
 
 PURSE_UREF=$(casper-client query-state --node-address http://198.23.235.165:7777 --key "$PUBLIC_KEY_HEX" --state-root-hash "$STATE_ROOT_HASH" | jq -r '.result | .stored_value | .Account | .main_purse')
