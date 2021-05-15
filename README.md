@@ -1,5 +1,5 @@
-# casperstake
-Casperlabs CSPR script for staking the coins in the validator node
+# Casper tokens CSPR of Casperlabs Staking, Unstaking and Transfer Script
+Casperlabs CSPR script for staking, unstaking the coins in/from the validator node id 01090f4e3a28cc04ae751434bc8b9b3d8fb9741b0d6a2d29b23ab719edac5d3019
 
 ### Ubuntu 20.04
 
