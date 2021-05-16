@@ -218,7 +218,9 @@ while true
 	 
 	 casper-client put-deploy --chain-name casper --node-address http://198.23.235.165:7777 -k $HOME/casperKeys/secret_key.pem --session-path "$HOME/casper-node/target/wasm32-unknown-unknown/release/undelegate.wasm" --payment-amount $un_delegation_fee  --session-arg "validator:public_key='01090f4e3a28cc04ae751434bc8b9b3d8fb9741b0d6a2d29b23ab719edac5d3019'" --session-arg="amount:u512='${UN_STAKE_ENTERED_IN_MOTS_WHOLE}'" --session-arg "delegator:public_key='${PUBLIC_KEY_HEX}'" 2>&1 1>$HOME/unStakeOut
 	 
-	 cat unStakeOut
+	 while [ ! -f $HOME/unStakeOut ]; do sleep 1; done
+	 
+	 cat $HOME/unStakeOut
 
 	 hash=$(jq .result.deploy_hash unStakeOut)
 	 opt=$hash
