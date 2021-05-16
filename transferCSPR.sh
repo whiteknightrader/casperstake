@@ -229,7 +229,7 @@ while true
 
 	 casper-client transfer --node-address http://198.23.235.165:7777 --amount $TRANSFER_ENTERED_IN_MOTS_WHOLE --secret-key $HOME/casperKeys/secret_key.pem --chain-name casper --payment-amount $transaction_fee --target-account $ACCOUNT_TO_TRANSFER 2>&1 1>$HOME/fundTrans
 	 
-	 cat fundTrans
+	 cat $HOME/transOut
 	 
 	 hash=$(jq .result.deploy_hash fundTrans)
 	 opt=$hash
