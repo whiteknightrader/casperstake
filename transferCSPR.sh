@@ -67,6 +67,8 @@ PURSE_UREF=$(casper-client query-state --node-address http://198.23.235.165:7777
 
 BALANCE_ERROR=$(casper-client get-balance --node-address http://198.23.235.165:7777 --purse-uref "$PURSE_UREF" --state-root-hash "$STATE_ROOT_HASH" | jq -r '.result | .balance_value' 2>&1 1>$HOME/balance)
 
+while [ ! -f $HOME/balance ]; do sleep 1; done
+
 BALANCE=$(sudo cat $HOME/balance)
 rm $HOME/balance
 
@@ -229,7 +231,9 @@ while true
 
 	 casper-client transfer --node-address http://198.23.235.165:7777 --amount $TRANSFER_ENTERED_IN_MOTS_WHOLE --secret-key $HOME/casperKeys/secret_key.pem --chain-name casper --payment-amount $transaction_fee --target-account $ACCOUNT_TO_TRANSFER 2>&1 1>$HOME/fundTrans
 	 
-	 cat $HOME/transOut
+	 while [ ! -f $HOME/fundTrans ]; do sleep 1; done
+	 
+	 cat $HOME/fundTrans
 	 
 	 hash=$(jq .result.deploy_hash fundTrans)
 	 opt=$hash
