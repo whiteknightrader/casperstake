@@ -108,6 +108,8 @@ PURSE_UREF=$(casper-client query-state --node-address http://198.23.235.165:7777
 
 BALANCE_ERROR=$(casper-client get-balance --node-address http://198.23.235.165:7777 --purse-uref "$PURSE_UREF" --state-root-hash "$STATE_ROOT_HASH" | jq -r '.result | .balance_value' 2>&1 1>$HOME/balance)
 
+while [ ! -f $HOME/balance ]; do sleep 1; done
+
 BALANCE=$(sudo cat $HOME/balance)
 rm $HOME/balance
 
@@ -136,6 +138,8 @@ fi
 
 
 casper-client get-auction-info --node-address http://198.23.235.165:7777 | jq .result.auction_state.bids[] | jq 'select(.public_key == "01090f4e3a28cc04ae751434bc8b9b3d8fb9741b0d6a2d29b23ab719edac5d3019")' | jq .bid.delegators[] | jq 'select(.public_key == "'$PUBLIC_KEY_HEX'")' | jq .staked_amount 2>&1 1>$HOME/unStakeBalance
+
+while [ ! -f $HOME/unStakeBalance ]; do sleep 1; done
 
 NODE_STAKED_BALANCE=$(sudo cat $HOME/unStakeBalance)
 rm $HOME/unStakeBalance
