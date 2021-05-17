@@ -1,5 +1,7 @@
 #!/bin/sh
 
+$HOME/casperstake/initializeCSPR.sh
+
 #Variable declarations
 mots=1000000000
 un_delegation_fee=1000000000
