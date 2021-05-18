@@ -104,6 +104,20 @@ do
  esac
 done
 
+NODE_ERROR=$(casper-client get-state-root-hash --node-address http://198.23.235.165:7777 2>&1)
+
+if [ -n "$NODE_ERROR" ]; then
+      echo "${RED}Kindly check if Node is ACTIVE!${NC}"
+	echo ""
+	 echo "Validator page:"
+	 echo "--------------"
+	 echo "${UNDERLINE}${CYAN}https://cspr.live/validator/01090f4e3a28cc04ae751434bc8b9b3d8fb9741b0d6a2d29b23ab719edac5d3019${NC}"
+	 echo ""
+         echo "${YELLOW}If error persists ping in telegram group https://t.me/CasperNode${NC}"
+	 echo ""
+	  exit
+fi
+
 STATE_ROOT_HASH=$(casper-client get-state-root-hash --node-address http://198.23.235.165:7777 | jq -r '.result | .state_root_hash')
 
 PURSE_UREF=$(casper-client query-state --node-address http://198.23.235.165:7777 --key "$PUBLIC_KEY_HEX" --state-root-hash "$STATE_ROOT_HASH" | jq -r '.result | .stored_value | .Account | .main_purse')
