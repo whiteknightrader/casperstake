@@ -106,7 +106,9 @@ delegation_fee=3000000000
 #Standard Calculations do not delete
 delegation_fee_decimal=$(echo "scale=9; $delegation_fee/$mots" | bc)
 
-NODE_ERROR=$(casper-client get-state-root-hash --node-address http://198.23.235.165:7777 2>&1)
+NODE_ERROR=$(casper-client get-state-root-hash --node-address http://198.23.235.165:7777 2>&1 1>$HOME/testrpc)
+while [ ! -f $HOME/testrpc ]; do sleep 1; done
+rm $HOME/testrpc
 
 if [ -n "$NODE_ERROR" ]; then
       echo "${RED}Kindly check if Node is ACTIVE!${NC}"
